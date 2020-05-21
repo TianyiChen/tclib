@@ -1,4 +1,4 @@
-VERSION='0.0.2'
+VERSION='0.0.3'
 
 import configparser
 import os
@@ -15,12 +15,13 @@ def download(url,path,checksum=None):
 	import urllib.request
 	import hashlib
 	try:
-		if checksum is not None and hashlib.sha256(open(path,'rb').read()).hexdigest()==checksum:
+		h=hashlib.sha256(open(path,'rb').read()).hexdigest()
+		if checksum is not None and (checksum==h or checksum=='any'):
 			return
 	except:
 		pass
 	urllib.request.urlretrieve(url, path)
-	if checksum is not None:
+	if checksum is not None and checksum!='any':
 		if hashlib.sha256(open(path,'rb').read()).hexdigest()!=checksum:
 			raise Exception('Checksum failed')
 def ifttt_config():
